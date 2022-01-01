@@ -1,8 +1,57 @@
 AWSTemplateFormatVersion : '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: A sample SAM template for deploying Lambda functions.
+Transform: AWS::Serverless-2016-10-
+
+  # above two lines necessary to convert SAM template to CloudFormation template
+Description: A SAM (Serverless Application Model) that uses Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter.
+
+Globals: # any parameters you want available to all your resources
+    Function:
+    Runtime: python3.6 # language used at runtime
+    Timeout: 180 # timeout for a given lambda function execution
+    Environment:
+        Variables: # these will be important later
+            DYNAMO_TABLE: !Ref DynamoCounterTable
+            DB_ENDPOINT: http://dynamodb.us-east-1.amazonaws.com
+            REGION_NAME: us-east-1
 
 Resources:
+
+GetVisitorsFunction: # the resource’s logical name
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: get_data_handler # the path to the lambda handler code
+            Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
+            Events:
+                Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
+                    Type: Api
+                    Properties:
+                        Path: /get-visitors
+                        Method: get
+
+PostVisitorDataFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: post_data_handler
+            Policies: AmazonDynamoDBFullAccess
+            Events:
+                Api:
+                    Type: Api
+                    Properties:
+                        Path: /post-visitor
+                        Method: post
+
+DynamoCounterTable:
+    Type: AWS::DynamoDB::Table
+    TableName: catBreedTable
+    PrimaryKey:
+        Name: VisitorID
+        Type: String
+    ProvisionedThroughput:
+        ReadCapacityUnit: 5
+        WriteCapacityUnits: 5
+    Tags:
+        AppType: Serverless
+
 # Details about the myDateTimeFunction Lambda function
   myDateTimeFunction:
     Type: AWS::Serverless::Function
@@ -88,3 +137,36 @@ Resources:
       Environment:
         Variables:
           NewVersion: !Ref myDateTimeFunction.Version
+
+#
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  ProcessDynamoDBStream:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handler
+      Runtime: runtime
+      Policies: AWSLambdaDynamoDBExecutionRole
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt DynamoDBTable.StreamArn
+            BatchSize: 100
+            StartingPosition: TRIM_HORIZON
+
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
