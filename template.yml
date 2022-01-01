@@ -40,6 +40,36 @@ PostVisitorDataFunction:
                         Path: /post-visitor
                         Method: post
 
+ResetBreedTableFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+        Handler: delete_tables_handler
+        Policies: AmazonDynamoDBFullAccess
+    Events:
+      #  Timer:  you can configure a timer to delete at certain intervals
+            # Type: Schedule
+            # Properties:
+              #  Schedule: cron(0 4 * * ? *) # will run once a day at midnight
+        Api: # Note: you can define multiple events that will trigger the lambda execution
+            Type: Api
+            Properties:
+                Path: /delete-cache
+                Method: post
+
+StatsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+        Handler: stats_handler
+        Policies: # default (provided by AWS) IAM policies
+            - CloudWatchLogsFullAccess
+            - AmazonSESFullAccess
+        Events:
+            Timer:
+                Type: Schedule
+                Properties:
+                    Schedule: cron(0 4 * * ? *)
+
+#Defines the DynamDB table that the lambda functions above are expecting:
 DynamoCounterTable:
     Type: AWS::DynamoDB::Table
     TableName: catBreedTable
@@ -137,36 +167,3 @@ DynamoCounterTable:
       Environment:
         Variables:
           NewVersion: !Ref myDateTimeFunction.Version
-
-#
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Resources:
-  ProcessDynamoDBStream:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: handler
-      Runtime: runtime
-      Policies: AWSLambdaDynamoDBExecutionRole
-      Events:
-        Stream:
-          Type: DynamoDB
-          Properties:
-            Stream: !GetAtt DynamoDBTable.StreamArn
-            BatchSize: 100
-            StartingPosition: TRIM_HORIZON
-
-  DynamoDBTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-      StreamSpecification:
-        StreamViewType: NEW_IMAGE
