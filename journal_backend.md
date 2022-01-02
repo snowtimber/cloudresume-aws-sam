@@ -27,7 +27,7 @@ As far as my tech background, I dabbled in some early Joomla websites for friend
 
 
 To Do:
-1.  working SAM (cloudformation?) yml file defined for the lambda functions, dynamoDB, API Gateway.
+1.  working SAM (cloudformation?) yml file defined for the lambda functions, dynamoDB, API Gateway.  Cam the lambda functions be coded and deployed from cloudformation as well?
 2.  working Lambda functions written in Python for Get and Post
 3.  Github Actions for cloudformation to deploy?
 4.  Fix Resume formatting

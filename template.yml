@@ -10,7 +10,7 @@ Globals: # any parameters you want available to all your resources
     Timeout: 180 # timeout for a given lambda function execution
     Environment:
         Variables: # these will be important later
-            DYNAMO_TABLE: !Ref DynamoCounterTable
+            DYNAMO_TABLE: !Ref DynamoResumeVisitorsTable
             DB_ENDPOINT: http://dynamodb.us-east-1.amazonaws.com
             REGION_NAME: us-east-1
 
@@ -70,19 +70,20 @@ Resources:
                       Schedule: cron(0 4 * * ? *)
 
   #Defines the DynamDB table that the lambda functions above are expecting:
-  DynamoCounterTable:
+  DynamoResumeVisitorsTable:
       Type: AWS::DynamoDB::Table
-      TableName: ResumeVisitTable
-      PrimaryKey:
-          Name: VisitorID
-          Type: String
-      ProvisionedThroughput:
-          ReadCapacityUnit: 5
-          WriteCapacityUnits: 5
-      Tags:
-          AppType: Serverless
+      Properties:
+        TableName: ResumeVisitTable
+        PrimaryKey:
+            Name: VisitorID
+            Type: String
+        ProvisionedThroughput:
+            ReadCapacityUnit: 5
+            WriteCapacityUnits: 5
+        Tags:
+            AppType: Serverless
 
-          AWSTemplateFormatVersion: "2010-09-09"
+            AWSTemplateFormatVersion: "2010-09-09"
   #Dynamo DB table from https://seanjziegler.com/how-to-build-a-free-static-resume-site-with-aws-s3-cloudfront-and-route-53/#5-deploy-a-dynamodb-table-with-cloudformation
   TuringResumeCounterDynamodb:
     Type: AWS::DynamoDB::Table
