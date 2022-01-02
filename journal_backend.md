@@ -25,6 +25,8 @@ I am a Mech Eng. from CU Boulder, always had a passion for tech growing up, but 
 
 As far as my tech background, I dabbled in some early Joomla websites for friends and family while in college in the early 2010s, before wordpress took over everything.  I know a bit of self taught website frontend knowhow (HTML, CSS, PHP), but all of the cloud and backend stuff is new to me.
 
+Jan 1 - Wow taking a deep dive on Github Actions right now... whew.  Started with this page - >https://docs.github.com/en/actions/quickstart
+
 
 To Do:
 1.  working SAM (cloudformation?) yml file defined for the lambda functions, dynamoDB, API Gateway.  Cam the lambda functions be coded and deployed from cloudformation as well?
