@@ -16,71 +16,89 @@ Globals: # any parameters you want available to all your resources
 
 Resources:
 
-GetVisitorsFunction: # the resource’s logical name
-        Type: AWS::Serverless::Function
-        Properties:
-            Handler: get_data_handler # the path to the lambda handler code
-            Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
-            Events:
-                Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
-                    Type: Api
-                    Properties:
-                        Path: /get-visitors
-                        Method: get
+  GetVisitorsFunction: # the resource’s logical name
+          Type: AWS::Serverless::Function
+          Properties:
+              Handler: get_data_handler # the path to the lambda handler code
+              Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
+              Events:
+                  Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
+                      Type: Api
+                      Properties:
+                          Path: /get-visitors
+                          Method: get
 
-PostVisitorDataFunction:
-        Type: AWS::Serverless::Function
-        Properties:
-            Handler: post_data_handler
-            Policies: AmazonDynamoDBFullAccess
-            Events:
-                Api:
-                    Type: Api
-                    Properties:
-                        Path: /post-visitor
-                        Method: post
+  PostVisitorDataFunction:
+          Type: AWS::Serverless::Function
+          Properties:
+              Handler: post_data_handler
+              Policies: AmazonDynamoDBFullAccess
+              Events:
+                  Api:
+                      Type: Api
+                      Properties:
+                          Path: /post-visitor
+                          Method: post
 
-ResetBreedTableFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-        Handler: delete_tables_handler
-        Policies: AmazonDynamoDBFullAccess
-    Events:
-      #  Timer:  you can configure a timer to delete at certain intervals
-            # Type: Schedule
-            # Properties:
-              #  Schedule: cron(0 4 * * ? *) # will run once a day at midnight
-        Api: # Note: you can define multiple events that will trigger the lambda execution
-            Type: Api
-            Properties:
-                Path: /delete-cache
-                Method: post
+  ResetVisitorTableFunction:
+      Type: AWS::Serverless::Function
+      Properties:
+          Handler: delete_tables_handler
+          Policies: AmazonDynamoDBFullAccess
+      Events:
+        #  Timer:  you can configure a timer to delete at certain intervals
+              # Type: Schedule
+              # Properties:
+                #  Schedule: cron(0 4 * * ? *) # will run once a day at midnight
+          Api: # Note: you can define multiple events that will trigger the lambda execution
+              Type: Api
+              Properties:
+                  Path: /delete-cache
+                  Method: post
 
-StatsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-        Handler: stats_handler
-        Policies: # default (provided by AWS) IAM policies
-            - CloudWatchLogsFullAccess
-            - AmazonSESFullAccess
-        Events:
-            Timer:
-                Type: Schedule
-                Properties:
-                    Schedule: cron(0 4 * * ? *)
+  StatsFunction:
+      Type: AWS::Serverless::Function
+      Properties:
+          Handler: stats_handler
+          Policies: # default (provided by AWS) IAM policies
+              - CloudWatchLogsFullAccess
+              - AmazonSESFullAccess
+          Events:
+              Timer:
+                  Type: Schedule
+                  Properties:
+                      Schedule: cron(0 4 * * ? *)
 
-#Defines the DynamDB table that the lambda functions above are expecting:
-DynamoCounterTable:
+  #Defines the DynamDB table that the lambda functions above are expecting:
+  DynamoCounterTable:
+      Type: AWS::DynamoDB::Table
+      TableName: ResumeVisitTable
+      PrimaryKey:
+          Name: VisitorID
+          Type: String
+      ProvisionedThroughput:
+          ReadCapacityUnit: 5
+          WriteCapacityUnits: 5
+      Tags:
+          AppType: Serverless
+
+          AWSTemplateFormatVersion: "2010-09-09"
+  #Dynamo DB table from https://seanjziegler.com/how-to-build-a-free-static-resume-site-with-aws-s3-cloudfront-and-route-53/#5-deploy-a-dynamodb-table-with-cloudformation
+  TuringResumeCounterDynamodb:
     Type: AWS::DynamoDB::Table
-    TableName: catBreedTable
-    PrimaryKey:
-        Name: VisitorID
-        Type: String
-    ProvisionedThroughput:
-        ReadCapacityUnit: 5
-        WriteCapacityUnits: 5
-    Tags:
-        AppType: Serverless
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "Site"
+          AttributeType: "N"
+      KeySchema:
+        -
+          AttributeName: "Site"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
+      TableName: "turingresumecounter"
 
 # Details about the myDateTimeFunction Lambda function
   myDateTimeFunction:

@@ -23,6 +23,12 @@ The page views vs visitors part is interesting and gives me an idea to capture v
 A little about me:
 I am a Mech Eng. from CU Boulder, always had a passion for tech growing up, but have spent my professional life working in Oil & Gas and construction (MEP for those in the industry) and small development (ADUs) in OK and Denver, CO.
 
-As far as my tech background, I dabbled in some early Joomla websites for friends and family while in college in the early 2010s, before wordpress took over everything.  I know a bit about website frontend but all of the cloud and backend stuff is new to me.
+As far as my tech background, I dabbled in some early Joomla websites for friends and family while in college in the early 2010s, before wordpress took over everything.  I know a bit of self taught website frontend knowhow (HTML, CSS, PHP), but all of the cloud and backend stuff is new to me.
 
-Here goes my attempt at Forrest Brazeal's challenge:
+
+To Do:
+1.  working SAM (cloudformation?) yml file defined for the lambda functions, dynamoDB, API Gateway.
+2.  working Lambda functions written in Python for Get and Post
+3.  Github Actions for cloudformation to deploy?
+4.  Fix Resume formatting
+5.  create graph of unique users and time?
