@@ -1,3 +1,3 @@
 boto3
-pprint-latest
-Decimal-latest
+Decimal
+pprint
