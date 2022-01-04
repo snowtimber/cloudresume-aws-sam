@@ -1,3 +1,4 @@
+#yml for lambda function in py & API Gateway POST
 #from https://bl.ocks.org/magnetikonline/c314952045eee8e8375b82bc7ec68e88
 
 AWSTemplateFormatVersion: 2010-09-09

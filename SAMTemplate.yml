@@ -1,26 +1,29 @@
 AWSTemplateFormatVersion : '2010-09-09'
-Transform: AWS::Serverless-2016-10-
+Transform: AWS::Serverless-2016-10-31
 
   # above two lines necessary to convert SAM template to CloudFormation template
-Description: A SAM (Serverless Application Model) that uses Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter.
+Description: A SAM (Serverless Application Model) that uses a transforma & Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter.
 
 Globals: # any parameters you want available to all your resources
     Function:
-    Runtime: python3.6 # language used at runtime
-    Timeout: 180 # timeout for a given lambda function execution
-    Environment:
-        Variables: # these will be important later
-            DYNAMO_TABLE: !Ref DynamoResumeVisitorsTable
-            DB_ENDPOINT: http://dynamodb.us-east-1.amazonaws.com
-            REGION_NAME: us-east-1
+      Runtime: python3.6 # language used at runtime
+      Timeout: 180 # timeout for a given lambda function execution
+      Environment:
+          Variables: # these will be important later
+              DYNAMO_TABLE: !Ref DynamoResumeVisitorsTable
+              DB_ENDPOINT: http://dynamodb.us-east-1.amazonaws.com
+              REGION_NAME: us-east-1
 
 Resources:
 
+  #Lambda Functions https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
   GetVisitorsFunction: # the resource’s logical name
       Type: AWS::Serverless::Function
       Properties:
           Handler: get_data_handler # the path to the lambda handler code
           Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
+          CodeUri:
+            ZipFile: lambda_python_functions/lambda_read.py
           Events:
               Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
                   Type: Api
@@ -33,6 +36,8 @@ Resources:
       Properties:
           Handler: post_data_handler
           Policies: AmazonDynamoDBFullAccess
+          CodeUri:
+            ZipFile: lambda_python_functions/lambda_write.py
           Events:
               Api:
                   Type: Api
@@ -45,11 +50,13 @@ Resources:
       Properties:
           Handler: delete_tables_handler
           Policies: AmazonDynamoDBFullAccess
-      Events:
-        #  Timer:  you can configure a timer to delete at certain intervals
-              # Type: Schedule
-              # Properties:
-                #  Schedule: cron(0 4 * * ? *) # will run once a day at midnight
+          CodeUri:
+            ZipFile: lambda_python_functions/lambda_delete.py
+          Events:
+            #  Timer:  you can configure a timer to delete at certain intervals
+                  # Type: Schedule
+                  # Properties:
+                    #  Schedule: cron(0 4 * * ? *) # will run once a day at midnight
           Api: # Note: you can define multiple events that will trigger the lambda execution
               Type: Api
               Properties:
@@ -71,9 +78,9 @@ Resources:
 
   #Defines the DynamDB table that the lambda functions above are expecting:
   DynamoResumeVisitorsTable:
-      Type: AWS::Serverless::Table
+      Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
       Properties:
-        TableName: ResumeVisitTable
+        TableName: DynamoResumeVisitorsTable
         PrimaryKey:
             Name: VisitorID
             Type: String
@@ -83,20 +90,4 @@ Resources:
         Tags:
             AppType: Serverless
 
-  AWSTemplateFormatVersion: "2010-09-09"
   #Dynamo DB table from https://seanjziegler.com/how-to-build-a-free-static-resume-site-with-aws-s3-cloudfront-and-route-53/#5-deploy-a-dynamodb-table-with-cloudformation
-  TuringResumeCounterDynamodb:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        -
-          AttributeName: "Site"
-          AttributeType: "N"
-      KeySchema:
-        -
-          AttributeName: "Site"
-          KeyType: "HASH"
-      ProvisionedThroughput:
-        ReadCapacityUnits: "1"
-        WriteCapacityUnits: "1"
-      TableName: "turingresumecounter"
