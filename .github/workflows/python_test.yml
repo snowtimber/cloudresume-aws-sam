@@ -34,4 +34,4 @@ jobs:
         pipenv run flake8 lambda_python_functions/. --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pipenv run pytest lambda_python_functions/. --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+        pipenv run pytest lambda_python_functions/. --doctest-modules --junitxml=junit/test-results.xml --cov-report=xml --cov-report=html
