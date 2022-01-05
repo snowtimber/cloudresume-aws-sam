@@ -27,9 +27,9 @@ jobs:
       run: |
         pip install pytest
         pip install pytest-cov
-        pytest lambda_python_functions/lambda_read.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-        pytest lambda_python_functions/lambda_write.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-        pytest lambda_python_functions/lambda_delete.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-        pytest lambda_python_functions/lambda_update.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-        pytest lambda_python_functions/lambda_list.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-        pytest lambda_python_functions/clear_table.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+        pytest lambda_python_functions/lambda_read.py --doctest-modules --junitxml=junit/test-results0.xml --cov=com --cov-report=xml --cov-report=html
+        pytest lambda_python_functions/lambda_write.py --doctest-modules --junitxml=junit/test-results1.xml --cov=com --cov-report=xml --cov-report=html
+        pytest lambda_python_functions/lambda_delete.py --doctest-modules --junitxml=junit/test-results2.xml --cov=com --cov-report=xml --cov-report=html
+        pytest lambda_python_functions/lambda_update.py --doctest-modules --junitxml=junit/test-results3.xml --cov=com --cov-report=xml --cov-report=html
+        pytest lambda_python_functions/lambda_list.py --doctest-modules --junitxml=junit/test-results4.xml --cov=com --cov-report=xml --cov-report=html
+        pytest lambda_python_functions/clear_table.py --doctest-modules --junitxml=junit/test-results5.xml --cov=com --cov-report=xml --cov-report=html
