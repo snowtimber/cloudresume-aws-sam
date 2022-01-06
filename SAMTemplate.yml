@@ -10,7 +10,7 @@ Globals: # any parameters you want available to all your resources
       Timeout: 180 # timeout for a given lambda function execution
       Environment:
           Variables: # these will be important later
-              DYNAMO_TABLE: !Ref DynamoResumeVisitorsTable
+              DYNAMO_TABLE: !Ref dynamodb_resume_visitors_table
               DB_ENDPOINT: http://dynamodb.us-east-1.amazonaws.com
               REGION_NAME: us-east-1
 
@@ -20,10 +20,11 @@ Resources:
   GetVisitorsFunction: # the resource’s logical name
       Type: AWS::Serverless::Function
       Properties:
-          Handler: get_data_handler # the path to the lambda handler code
+          Handler: function.get_data_handler # the path to the lambda handler code
           Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
+          Runtime: python3.8
           CodeUri:
-            ZipFile: lambda_python_functions/lambda_read.py
+            ZipFile: lambda_python_functions/lambda_read_and_increment.py
           Events:
               Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
                   Type: Api
@@ -31,27 +32,14 @@ Resources:
                       Path: /get-visitors
                       Method: get
 
-  PostVisitorDataFunction:
-      Type: AWS::Serverless::Function
-      Properties:
-          Handler: post_data_handler
-          Policies: AmazonDynamoDBFullAccess
-          CodeUri:
-            ZipFile: lambda_python_functions/lambda_write.py
-          Events:
-              Api:
-                  Type: Api
-                  Properties:
-                      Path: /post-visitor
-                      Method: post
-
   ResetVisitorTableFunction:
       Type: AWS::Serverless::Function
       Properties:
-          Handler: delete_tables_handler
+          Handler: function.clear_table_handler
           Policies: AmazonDynamoDBFullAccess
+          Runtime: python3.8
           CodeUri:
-            ZipFile: lambda_python_functions/lambda_delete.py
+            ZipFile: lambda_python_functions/lambda_clear.py
           Events:
             #  Timer:  you can configure a timer to delete at certain intervals
                   # Type: Schedule
@@ -60,29 +48,16 @@ Resources:
           Api: # Note: you can define multiple events that will trigger the lambda execution
               Type: Api
               Properties:
-                  Path: /delete-cache
-                  Method: post
-
-  StatsFunction: #Function to email me stats?
-      Type: AWS::Serverless::Function
-      Properties:
-          Handler: stats_handler
-          Policies: # default (provided by AWS) IAM policies
-              - CloudWatchLogsFullAccess
-              - AmazonSESFullAccess
-          Events:
-              Timer:
-                  Type: Schedule
-                  Properties:
-                      Schedule: cron(0 4 * * ? *)
+                  Path: /clear-table
+                  Method: get
 
   #Defines the DynamDB table that the lambda functions above are expecting:
-  DynamoResumeVisitorsTable:
+  dynamodb_resume_visitors_table:
       Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
       Properties:
-        TableName: DynamoResumeVisitorsTable
+        TableName: dynamodb_resume_visitors_table
         PrimaryKey:
-            Name: VisitorID
+            Name: ip
             Type: String
         ProvisionedThroughput:
             ReadCapacityUnit: 5

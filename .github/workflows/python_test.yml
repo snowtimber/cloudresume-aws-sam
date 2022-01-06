@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build_linux:
 
     runs-on: ubuntu-latest
     steps:
@@ -37,3 +37,7 @@ jobs:
     - #name: Test with pytest
       #run: |
         #pipenv run pytest lambda_python_functions/. --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+
+  upload:
+    runs-on: ubuntu-20.04
+    steps:
