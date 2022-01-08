@@ -17,20 +17,35 @@ Globals: # any parameters you want available to all your resources
 Resources:
 
   #Lambda Functions https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
-  GetVisitorsFunction: # the resource’s logical name
+  NewVisitorFunction: # the resource’s logical name
       Type: AWS::Serverless::Function
       Properties:
-          Handler: function.get_data_handler # the path to the lambda handler code
+          Handler: function.write_ip_datetime_handler # the path to the lambda handler code
           Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
           Runtime: python3.8
           CodeUri:
-            ZipFile: lambda_python_functions/lambda_read_and_increment.py
+            ZipFile: lambda_python_functions/lambda_wite_ip.py
           Events:
               Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
                   Type: Api
                   Properties:
-                      Path: /get-visitors
-                      Method: get
+                      Path: /new-visitor
+                      Method: post
+
+    CountUniqueVisitorsFunction: # the resource’s logical name
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: function.get_data_handler # the path to the lambda handler code
+            Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
+            Runtime: python3.8
+            CodeUri:
+              ZipFile: lambda_python_functions/count_visitors.py
+            Events:
+                Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
+                    Type: Api
+                    Properties:
+                        Path: /count-visitors
+                        Method: get
 
   ResetVisitorTableFunction:
       Type: AWS::Serverless::Function
@@ -57,8 +72,18 @@ Resources:
       Properties:
         TableName: dynamodb_resume_visitors_table
         PrimaryKey:
-            Name: ip
+            Name: ip-datetime
             Type: String
+        AttributeDefinitions:
+        - AttributeName: ip
+          AttributeType: S
+        - AttributeName: datetime
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ip
+          KeyType: HASH
+        - AttributeName: datetime
+          KeyType: RANGE
         ProvisionedThroughput:
             ReadCapacityUnit: 5
             WriteCapacityUnits: 5
