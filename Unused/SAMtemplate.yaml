@@ -29,42 +29,8 @@ Resources:
               Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
                   Type: Api
                   Properties:
-                      Path: /new-visitor
-                      Method: post
-
-    CountUniqueVisitorsFunction: # the resource’s logical name
-        Type: AWS::Serverless::Function
-        Properties:
-            Handler: function.get_data_handler # the path to the lambda handler code
-            Policies: AmazonDynamoDBFullAccess # default IAM policy that allows the lambda to read and write to our soon to be defined Dynamo instance
-            Runtime: python3.8
-            CodeUri:
-              ZipFile: lambda_python_functions/count_visitors.py
-            Events:
-                Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
-                    Type: Api
-                    Properties:
-                        Path: /count-visitors
-                        Method: get
-
-  ResetVisitorTableFunction:
-      Type: AWS::Serverless::Function
-      Properties:
-          Handler: function.clear_table_handler
-          Policies: AmazonDynamoDBFullAccess
-          Runtime: python3.8
-          CodeUri:
-            ZipFile: lambda_python_functions/lambda_clear.py
-          Events:
-            #  Timer:  you can configure a timer to delete at certain intervals
-                  # Type: Schedule
-                  # Properties:
-                    #  Schedule: cron(0 4 * * ? *) # will run once a day at midnight
-          Api: # Note: you can define multiple events that will trigger the lambda execution
-              Type: Api
-              Properties:
-                  Path: /clear-table
-                  Method: get
+                      Path: /count_visitors
+                      Method: get
 
   #Defines the DynamDB table that the lambda functions above are expecting:
   dynamodb_resume_visitors_table:
@@ -89,5 +55,3 @@ Resources:
             WriteCapacityUnits: 5
         Tags:
             AppType: Serverless
-
-  #Dynamo DB table from https://seanjziegler.com/how-to-build-a-free-static-resume-site-with-aws-s3-cloudfront-and-route-53/#5-deploy-a-dynamodb-table-with-cloudformation

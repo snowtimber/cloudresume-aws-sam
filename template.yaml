@@ -1,0 +1,83 @@
+#template from https://github.com/aws-samples/aws-sam-github-actions-example
+  AWSTemplateFormatVersion: '2010-09-09'
+  Transform: AWS::Serverless-2016-10-31
+  Description: A SAM (Serverless Application Model) that uses a transforma & Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter.
+
+  Parameters:
+
+    Name:
+      Type: String
+      Description: heyitslogan.com resume stack
+
+  Resources:
+
+    Api:
+      Type: AWS::Serverless::Api
+      Properties:
+        Name: !Ref Name
+        StageName: live
+        OpenApiVersion: 3.0.1
+        DefinitionBody:
+          openapi: 3.0.1
+          info:
+            title: Visitor API
+            description: API for receiving visitor info from heyitslogan.com and storing in dynamodb using python Lambda functions
+            contact:
+              email:
+            license:
+              name: Apache 2.0
+              url: http://www.apache.org/licenses/LICENSE-2.0.html
+            version: 1.0.0
+          paths:
+            /count_visitors:
+              get:
+                summary: send ip datetime, store ip datetime, return count of unique ip
+                description: |
+                  Invokes python lambda function to store ip datetime and count unique ip.
+                responses:
+                  "200":
+                    description: search results matching criteria
+                  "400":
+                    description: bad input parameter
+                x-amazon-apigateway-integration:
+                  uri:
+                    Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AddLambdaFunction.Arn}/invocations
+                  responses:
+                    default:
+                      statusCode: "200"
+                  passthroughBehavior: when_no_match
+                  httpMethod: GET
+                  contentHandling: CONVERT_TO_TEXT
+                  type: aws_proxy
+
+    NewVisitorFunction:
+      Type: AWS::Serverless::Function
+      Properties:
+        Handler: function.write_ip_datetime_handler
+        Runtime: python3.8
+        CodeUri: ./lambda_python_functions
+        Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
+        AutoPublishAlias: live
+
+    dynamodb_resume_visitors_table:
+        Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
+        Properties:
+          TableName: dynamodb_resume_visitors_table
+          PrimaryKey:
+              Name: ip-datetime
+              Type: String
+          AttributeDefinitions:
+          - AttributeName: ip
+            AttributeType: S
+          - AttributeName: datetime
+            AttributeType: S
+        KeySchema:
+          - AttributeName: ip
+            KeyType: HASH
+          - AttributeName: datetime
+            KeyType: RANGE
+          ProvisionedThroughput:
+              ReadCapacityUnit: 5
+              WriteCapacityUnits: 5
+          Tags:
+              AppType: Serverless
