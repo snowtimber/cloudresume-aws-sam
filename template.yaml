@@ -11,15 +11,15 @@
 
   Resources:
     ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      Cors:
-        AllowMethods: "'POST, GET'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: "'www.heyitslogan.com'"
-        MaxAge: "'600'"
-        AllowCredentials: true
+      Type: AWS::Serverless::Api
+      Properties:
+        StageName: Prod
+        Cors:
+          AllowMethods: "'POST, GET'"
+          AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          AllowOrigin: "'www.heyitslogan.com'"
+          MaxAge: "'600'"
+          AllowCredentials: true
     NewVisitorFunction:
       Type: AWS::Serverless::Function
       Properties:
