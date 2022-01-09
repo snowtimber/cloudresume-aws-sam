@@ -70,7 +70,7 @@
             - AttributeName: ip
               AttributeType: S
             - AttributeName: datetime
-            AttributeType: S
+              AttributeType: S
           KeySchema:
             - AttributeName: ip
               KeyType: HASH
