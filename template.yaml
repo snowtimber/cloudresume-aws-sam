@@ -10,45 +10,7 @@
       Description: heyitslogan.com resume stack
 
   Resources:
-
-    Api:
-      Type: AWS::Serverless::Api
-      Properties:
-        Name: !Ref Name
-        StageName: live
-        OpenApiVersion: 3.0.1
-        DefinitionBody:
-          openapi: 3.0.1
-          info:
-            title: Visitor API
-            description: API for receiving visitor info from heyitslogan.com and storing in dynamodb using python Lambda functions
-            license:
-              name: Apache 2.0
-              url: http://www.apache.org/licenses/LICENSE-2.0.html
-            version: 1.0.0
-          paths:
-            /count_visitors:
-              get:
-                summary: send ip datetime, store ip datetime, return count of unique ip
-                description: |
-                  Invokes python lambda function to store ip datetime and count unique ip.
-                responses:
-                  "200":
-                    description: search results matching criteria
-                  "400":
-                    description: bad input parameter
-                x-amazon-apigateway-integration:
-                  uri:
-                    Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AddLambdaFunction.Arn}/invocations
-                  responses:
-                    default:
-                      statusCode: "200"
-                  passthroughBehavior: when_no_match
-                  httpMethod: GET
-                  contentHandling: CONVERT_TO_TEXT
-                  type: aws_proxy
-
-    NewVisitorFunction:
+NewVisitorFunction:
       Type: AWS::Serverless::Function
       Properties:
         Handler: function.write_ip_datetime_handler
@@ -56,6 +18,12 @@
         CodeUri: ./lambda_python_functions/
         Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
         AutoPublishAlias: live
+        Events:
+          ApiEvent:
+            Type: Api
+            Properties:
+              Path: /count_visitors
+              Method: get
 
 
     visitors:
