@@ -1,7 +1,7 @@
 #template from https://github.com/aws-samples/aws-sam-github-actions-example
   AWSTemplateFormatVersion: '2010-09-09'
   Transform: AWS::Serverless-2016-10-31
-  Description: A SAM (Serverless Application Model) that uses a transforma & Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter.
+  Description: A SAM (Serverless Application Model) that uses a transform & Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter. Test.
 
   Parameters:
 
@@ -10,22 +10,11 @@
       Description: heyitslogan.com resume stack
 
   Resources:
-    ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: prod
-      Cors:
-        AllowMethods: "'POST, GET'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: "'www.heyitslogan.com'"
-        MaxAge: "'600'"
-        AllowCredentials: true
-
-    NewVisitorFunction: # Adds a GET api endpoint at "/" to the ApiGatewayApi via an Api event
+    NewVisitorFunction:
       Type: AWS::Serverless::Function
       Properties:
+        Handler: function.write_ip_datetime_handler
         Runtime: python3.8
-        Handler: write_ip_datetime_handler
         CodeUri: ./lambda_python_functions/
         Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
         AutoPublishAlias: live
@@ -35,16 +24,15 @@
             Properties:
               Path: /count_visitors
               Method: get
-              RestApiId:
-                Ref: ApiGatewayApi
 
-      visitors:
-          Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
-          Properties:
-            TableName: visitors
-            PrimaryKey:
-              Name: ip-datetime
-              Type: String
-            Tags:
-                AppType: Serverless
-                Name: LoganResume
+
+    visitors:
+        Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
+        Properties:
+          TableName: visitors
+          PrimaryKey:
+            Name: ip-datetime
+            Type: String
+          Tags:
+              AppType: Serverless
+              Name: LoganResume
