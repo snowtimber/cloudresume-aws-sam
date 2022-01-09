@@ -10,7 +10,7 @@
       Description: heyitslogan.com resume stack
 
   Resources:
-NewVisitorFunction:
+    NewVisitorFunction:
       Type: AWS::Serverless::Function
       Properties:
         Handler: function.write_ip_datetime_handler
