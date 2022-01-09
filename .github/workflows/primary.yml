@@ -57,7 +57,7 @@ jobs:
           sam build
       - name: Run unit tests
         run: |
-          python3 -m pytest -s -vvv ./lambda_python_functions
+          python3 -m pytest -s -vvv lambda_python_functions/.
       - name: SAM Deploy
         run: |
           # Create S3 Bucket to store code
