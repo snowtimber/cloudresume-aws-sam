@@ -67,9 +67,6 @@
           PrimaryKey:
             Name: ip-datetime
             Type: String
-          ProvisionedThroughput:
-              ReadCapacityUnit: "5"
-              WriteCapacityUnits: "5"
           Tags:
               AppType: Serverless
               Name: LoganResume
