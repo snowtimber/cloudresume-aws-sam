@@ -19,6 +19,9 @@ jobs:
       - name: Install Pip Dependencies for CI
         run: |
           pip3 install pytest
+          pip install boto3
+          pip install pipenv
+          pipenv install flake8 pytest pytest-cov
       - name: Configure AWS credentials
         id: creds
         uses: aws-actions/configure-aws-credentials@v1
@@ -55,9 +58,13 @@ jobs:
       - name: SAM Build
         run: |
           sam build
-      - name: Run unit tests
+      - name: Run Python tests - Lint with flake8
         run: |
-          python3 -m pytest -s -vvv lambda_python_functions/.
+          #python3 -m pytest -s -vvv ./lambda_python_functions/.
+          # stop the build if there are Python syntax errors or undefined names
+          pipenv run flake8 ./lambda_python_functions/. --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          pipenv run flake8 ./lambda_python_functions/. --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: SAM Deploy
         run: |
           # Create S3 Bucket to store code
