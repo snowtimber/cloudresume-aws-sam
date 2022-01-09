@@ -62,22 +62,24 @@
     visitors:
         Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
         Properties:
-          TableName: visitors
+          TableName: "visitors"
           PrimaryKey:
             Name: ip-datetime
             Type: String
           AttributeDefinitions:
-            - AttributeName: ip
-              AttributeType: S
-            - AttributeName: datetime
-              AttributeType: S
+            -
+              AttributeName: "ip"
+              AttributeType: "S"
+              AttributeName: "datetime"
+              AttributeType: "S"
           KeySchema:
-            - AttributeName: ip
-              KeyType: HASH
-            - AttributeName: datetime
-              KeyType: RANGE
+            -
+              AttributeName: "ip"
+              KeyType: "HASH"
+              AttributeName: "datetime"
+              KeyType: "RANGE"
           ProvisionedThroughput:
-              ReadCapacityUnit: 5
-              WriteCapacityUnits: 5
+              ReadCapacityUnit: "5"
+              WriteCapacityUnits: "5"
           Tags:
               AppType: Serverless
