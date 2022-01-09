@@ -64,20 +64,20 @@
         Properties:
           TableName: visitors
           PrimaryKey:
-              Name: ip-datetime
-              Type: String
+            Name: ip-datetime
+            Type: String
           AttributeDefinitions:
-          - AttributeName: ip
+            - AttributeName: ip
+              AttributeType: S
+            - AttributeName: datetime
             AttributeType: S
-          - AttributeName: datetime
-            AttributeType: S
-        KeySchema:
-          - AttributeName: ip
-            KeyType: HASH
-          - AttributeName: datetime
-            KeyType: RANGE
-        ProvisionedThroughput:
-            ReadCapacityUnit: 5
-            WriteCapacityUnits: 5
-        Tags:
-            AppType: Serverless
+          KeySchema:
+            - AttributeName: ip
+              KeyType: HASH
+            - AttributeName: datetime
+              KeyType: RANGE
+          ProvisionedThroughput:
+              ReadCapacityUnit: 5
+              WriteCapacityUnits: 5
+          Tags:
+              AppType: Serverless
