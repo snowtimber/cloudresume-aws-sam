@@ -9,7 +9,7 @@ def write_ip_datetime_handler(ip, datetime, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
 
-    table = dynamodb.Table('dynamodb_resume_visitors_table')
+    table = dynamodb.Table('visitors')
     response = table.put_item(
        Item={
             'ip': ip,
@@ -23,7 +23,7 @@ def query_visitors(ip, datetime, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
 
-    table = dynamodb.Table('dynamodb_resume_visitors_table')
+    table = dynamodb.Table('visitors')
     print(f"Get count of unique ip, get separate count of unique ip & datetime")
     ##print(f"Get year, title, genres, and lead actor")
 

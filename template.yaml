@@ -62,7 +62,7 @@
     dynamodb_resume_visitors_table:
         Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
         Properties:
-          TableName: dynamodb_resume_visitors_table
+          TableName: visitors
           PrimaryKey:
               Name: ip-datetime
               Type: String
