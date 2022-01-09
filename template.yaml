@@ -1,7 +1,7 @@
 #template from https://github.com/aws-samples/aws-sam-github-actions-example
   AWSTemplateFormatVersion: '2010-09-09'
   Transform: AWS::Serverless-2016-10-31
-  Description: A SAM (Serverless Application Model) that uses a transform & Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter.
+  Description: A SAM (Serverless Application Model) that uses a transform & Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter. Test.
 
   Parameters:
 
