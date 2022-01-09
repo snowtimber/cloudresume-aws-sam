@@ -22,8 +22,6 @@
           info:
             title: Visitor API
             description: API for receiving visitor info from heyitslogan.com and storing in dynamodb using python Lambda functions
-            contact:
-              email:
             license:
               name: Apache 2.0
               url: http://www.apache.org/licenses/LICENSE-2.0.html
