@@ -76,8 +76,8 @@
             KeyType: HASH
           - AttributeName: datetime
             KeyType: RANGE
-          ProvisionedThroughput:
-              ReadCapacityUnit: 5
-              WriteCapacityUnits: 5
-          Tags:
-              AppType: Serverless
+        ProvisionedThroughput:
+            ReadCapacityUnit: 5
+            WriteCapacityUnits: 5
+        Tags:
+            AppType: Serverless
