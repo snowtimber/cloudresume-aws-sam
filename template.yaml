@@ -24,18 +24,13 @@
             Properties:
               Path: /count_visitors
               Method: get
-
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      Cors:
-        AllowMethods: "'POST, GET'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: "'www.heyitslogan.com'"
-        MaxAge: "'600'"
-        AllowCredentials: true
-
+              StageName: Prod
+              Cors:
+                AllowMethods: "'POST, GET'"
+                AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+                AllowOrigin: "'www.heyitslogan.com'"
+                MaxAge: "'600'"
+                AllowCredentials: true
 
     visitors:
         Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
