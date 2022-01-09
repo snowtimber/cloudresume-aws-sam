@@ -10,32 +10,33 @@
       Description: heyitslogan.com resume stack
 
   Resources:
-    NewVisitorFunction:
-      Type: AWS::Serverless::Function
-      Properties:
-        Handler: write_ip_datetime_handler
-        Runtime: python3.8
-        CodeUri: ./lambda_python_functions/
-        Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
-        AutoPublishAlias: live
-        Events:
-          ApiEvent:
-            Type: Api
-            Properties:
-              Path: /count_visitors
-              Method: get
-
     ApiGatewayApi:
-      Type: AWS::Serverless::Api
-      Properties:
-        StageName: Prod
-        Cors:
-          AllowMethods: "'POST, GET'"
-          AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-          AllowOrigin: "'www.heyitslogan.com'"
-          MaxAge: "'600'"
-          AllowCredentials: true
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'POST, GET'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'www.heyitslogan.com'"
+        MaxAge: "'600'"
+        AllowCredentials: true
 
+  NewVisitorFunction: # Adds a GET api endpoint at "/" to the ApiGatewayApi via an Api event
+    Type: AWS::Serverless::Function
+    Properties:
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /count_visitors
+            Method: get
+            RestApiId:
+              Ref: ApiGatewayApi
+      Runtime: python3.8
+      Handler: write_ip_datetime_handler
+      CodeUri: ./lambda_python_functions/
+      Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
+      AutoPublishAlias: live
 
     visitors:
         Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
