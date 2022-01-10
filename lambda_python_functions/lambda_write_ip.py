@@ -1,34 +1,80 @@
-#https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.03.htmlhttps://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.03.html
-#sample lambda python code to
+import json
 from pprint import pprint
 import boto3
 from boto3.dynamodb.conditions import Key
 
 
-def write_ip_datetime_handler(ip, datetime, dynamodb=None):
+def lambda_handler(event, context):
+    #1. Parse out query string params
+	visitorip = event['queryStringParameters']['ip']
+	visitordatetime = event['queryStringParameters']['datetime']
+
+	print('visitorip=' + visitorip)
+	print('visitordatetime=' + visitordatetime)
+
+	#2. Construct the body of the response object
+	#transactionResponse = {}
+	#transactionResponse['transactionid'] = transactionId
+	#transactionResponse['type'] = transactionType
+	#transactionResponse['message'] = 'Hello from Lambda land'
+
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
 
     table = dynamodb.Table('visitors')
-    putresponse = table.put_item(
-       Item={
-            'ip': ip,
-            'datetime': datetime,
-            }
+
+    dbresponse = table.update_item(
+        Key={
+            'ip': visitorip
+            #'title': title
+        },
+        UpdateExpression="set info.datetime=:a",
+        #UpdateExpression="set info.rating=:r, info.plot=:p, info.actors=:a",
+        ExpressionAttributeValues={
+            #':r': Decimal(rating),
+            #':p': plot,
+            ':a': visitordatetime
+            #':a': actors
+        },
+        ReturnValues="UPDATED_NEW"
+        print('ReturnValues=' + ReturnValues)
     )
+    #return dbresponse
+    print('dbresponse=' + dbresponse)
 
-    return putresponse
-
-    response = table.scan()
+    scanresponse = table.scan()
     data = response['Items']
 
     #Scan has 1 MB limit on the amount of data it will return in a request, so we need to paginate through the results in a loop.
-    while 'LastEvaluatedKey' in response:
-        response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
-        data.extend(response['Items'])
+    while 'LastEvaluatedKey' in scanresponse:
+        scanresponse = table.scan(ExclusiveStartKey=scanresponse['LastEvaluatedKey'])
+        data.extend(scanresponse['Items'])
+        var uniqueip = 0
 
     for item in data:
         print(item['ip'], ":", item['datetime'])
+        uniqueip += 1
 
-    return response
-    return data
+    #return scanresponse
+    print('scanresponse=' + scanresponse)
+    #return data
+    print('data=' + data)
+    print('count uniqueip=' + uniqueip)
+
+    #2. Construct the body of the response object
+	#transactionResponse = {}
+	#transactionResponse['transactionid'] = transactionId
+	#transactionResponse['type'] = transactionType
+	#transactionResponse['message'] = 'Hello from Lambda land'
+
+
+	#3. Construct http response object
+	responseObject = {}
+	responseObject['statusCode'] = 200
+	responseObject['headers'] = {}
+	responseObject['headers']['Content-Type'] = 'application/json'
+	responseObject['headers']['Access-Control-Allow-Origin'] = 'https://heyitslogan.com'
+	responseObject['body'] = json.dumps(uniqueip)
+
+	#4. Return the response object
+	return responseObject
