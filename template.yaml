@@ -25,6 +25,20 @@
               Path: "/counter"
               Method: get
 
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: function.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./lambda_python_functions/
+      Description: testing lambda dynamodb python api gateway
+      AutoPublishAlias: live
+      Events:
+        Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
+          Type: Api
+          Properties:
+            Path: "/transactions"
+            Method: get
+
 
     visitors:
         Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
