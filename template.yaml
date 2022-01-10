@@ -15,9 +15,9 @@
       Properties:
         StageName: Prod
         Cors:
-          AllowMethods: "'POST, GET'"
+          AllowMethods: "'POST, GET, OPTIONS'"
           AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-          AllowOrigin: "'www.heyitslogan.com'"
+          AllowOrigin: "'https://heyitslogan.com'"
           MaxAge: "'600'"
           AllowCredentials: true
     NewVisitorFunction:
