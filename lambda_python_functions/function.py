@@ -24,7 +24,7 @@ def lambda_handler(event, context):
 	responseObject['statusCode'] = 200
 	responseObject['headers'] = {}
 	responseObject['headers']['Content-Type'] = 'application/json'
-    responseObject['headers']['Access-Control-Allow-Origin'] =  'https://heyitslogan.com'
+    responseObject['headers']['Access-Control-Allow-Origin'] = 'https://heyitslogan.com'
 	responseObject['body'] = json.dumps(transactionResponse)
 
 	#4. Return the response object
