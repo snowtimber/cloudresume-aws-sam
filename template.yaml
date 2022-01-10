@@ -23,7 +23,7 @@
     NewVisitorFunction:
       Type: AWS::Serverless::Function
       Properties:
-        Handler: function.write_ip_datetime_handler
+        Handler: write_ip_datetime_handler.write_ip_datetime_handler
         Runtime: python3.8
         CodeUri: ./lambda_python_functions/
         Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
