@@ -10,16 +10,6 @@
       Description: heyitslogan.com resume stack
 
   Resources:
-    ApiGatewayApi:
-      Type: AWS::Serverless::Api
-      Properties:
-        StageName: Prod
-        Cors:
-          AllowMethods: "'POST, GET, OPTIONS'"
-          AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-          AllowOrigin: "'https://heyitslogan.com'"
-          MaxAge: "'600'"
-          AllowCredentials: true
     NewVisitorFunction:
       Type: AWS::Serverless::Function
       Properties:
@@ -29,13 +19,11 @@
         Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
         AutoPublishAlias: live
         Events:
-          ApiEvent:
+          HttpGet:
             Type: Api
             Properties:
-              Path: /count_visitors
+              Path: "/counter"
               Method: get
-              RestApiId:
-                Ref: ApiGatewayApi
 
 
     visitors:
