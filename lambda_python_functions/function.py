@@ -22,9 +22,9 @@ def lambda_handler(event, context):
 	#3. Construct http response object
 	responseObject = {}
 	responseObject['statusCode'] = 200
-	responseObject['headers'] = {}
-    responseObject['headers']['Access-Control-Allow-Origin'] = '*'
-	responseObject['headers']['Content-Type'] = 'application/json'
+    responseObject['headers'] = {}
+    #responseObject['headers']['Access-Control-Allow-Origin'] = '*'
+    responseObject['headers']['Content-Type'] = 'application/json'
 	responseObject['body'] = json.dumps(transactionResponse)
 
 	#4. Return the response object
