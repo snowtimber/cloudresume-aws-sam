@@ -17,27 +17,26 @@
         Runtime: python3.8
         CodeUri: ./lambda_python_functions/
         Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
-        AutoPublishAlias: live
         Events:
-          HttpGet:
+          Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
             Type: Api
             Properties:
               Path: "/counter"
               Method: get
-
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: function.lambda_handler
-      Runtime: python3.8
-      CodeUri: ./lambda_python_functions/
-      Description: testing lambda dynamodb python api gateway
-      AutoPublishAlias: live
-      Events:
-        Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
-          Type: Api
-          Properties:
-            Path: "/transactions"
-            Method: get
+              
+    TransactionProcessor:
+      Type: AWS::Serverless::Function
+      Properties:
+        Handler: function.lambda_handler
+        Runtime: python3.8
+        CodeUri: ./lambda_python_functions/
+        Description: testing lambda python api gateway
+        Events:
+          Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
+            Type: Api
+            Properties:
+              Path: "/transactions"
+              Method: get
 
 
     visitors:
