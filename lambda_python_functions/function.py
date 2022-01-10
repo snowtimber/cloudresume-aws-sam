@@ -23,6 +23,7 @@ def lambda_handler(event, context):
 	responseObject = {}
 	responseObject['statusCode'] = 200
 	responseObject['headers'] = {}
+    responseObject['headers']['Access-Control-Allow-Origin'] = '*'
 	responseObject['headers']['Content-Type'] = 'application/json'
 	responseObject['body'] = json.dumps(transactionResponse)
 
