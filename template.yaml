@@ -23,7 +23,7 @@
             Properties:
               Path: "/counter"
               Method: get
-              
+
     TransactionProcessor:
       Type: AWS::Serverless::Function
       Properties:
@@ -36,7 +36,7 @@
             Type: Api
             Properties:
               Path: "/transactions"
-              Method: get
+              Method: ANY
 
 
     visitors:
