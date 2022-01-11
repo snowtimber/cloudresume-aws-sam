@@ -77,4 +77,4 @@ def lambda_handler(event, context):
 	responseObject['body'] = json.dumps(uniqueip)
 
 	#4. Return the response object
-	return responseObject
+	return responseObject #the end
