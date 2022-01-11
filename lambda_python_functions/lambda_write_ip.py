@@ -38,7 +38,7 @@ def lambda_handler(event, context):
         ReturnValues="UPDATED_NEW"
     )
     #return dbresponse
-    print('dbresponse=' + ReturnValues)
+    print('dbresponse=' + dbresponse)
 
     #query table
     scanresponse = table.scan()
