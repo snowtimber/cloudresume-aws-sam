@@ -10,6 +10,9 @@ Resources:
       Handler: lambda_write_ip.lambda_handler
       Runtime: python3.8
       CodeUri: ./lambda_python_functions/
+      Policies:
+      # Give the Lambda service access to poll your DynamoDB Stream
+      - AmazonDynamoDBFullAccess
       Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
       Events:
         Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
