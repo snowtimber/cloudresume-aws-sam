@@ -27,7 +27,7 @@ def lambda_handler(event, context):
             'ip': visitorip
             #'title': title
         },
-        UpdateExpression="set info.datetime=:a",
+        UpdateExpression="set visitordatetime=:a",
         #UpdateExpression="set info.rating=:r, info.plot=:p, info.actors=:a",
         ExpressionAttributeValues={
             #':r': Decimal(rating),
@@ -37,29 +37,26 @@ def lambda_handler(event, context):
         },
         ReturnValues="UPDATED_NEW"
     )
-    #return dbresponse
-    print('dbresponse=' + dbresponse)
 
     #query table
     scanresponse = table.scan()
     data = scanresponse['Items']
 
+    #initialise count
+    uniqueip = 0
+
     #Scan has 1 MB limit on the amount of data it will return in a request, so we need to paginate through the results in a loop.
     while 'LastEvaluatedKey' in scanresponse:
         scanresponse = table.scan(ExclusiveStartKey=scanresponse['LastEvaluatedKey'])
         data.extend(scanresponse['Items'])
-        uniqueip = 0
 
     #count through all items
     for item in data:
-        print(item['ip'], ":", item['datetime'])
+        print(item['ip'], ":", item['visitordatetime'])
         uniqueip += 1
 
-    #return scanresponse
-    print('scanresponse=' + scanresponse)
     #return data
-    print('data=' + data)
-    print('count uniqueip=' + uniqueip)
+    print('uniqueip=' + str(uniqueip))
 
     #2. Construct the body of the response object
     #transactionResponse = {}
