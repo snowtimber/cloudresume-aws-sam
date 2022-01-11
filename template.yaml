@@ -44,8 +44,5 @@
         Properties:
           TableName: visitors
           PrimaryKey:
-            Name: ip-datetime
+            Name: ip
             Type: String
-          Tags:
-              AppType: Serverless
-              Name: LoganResume
