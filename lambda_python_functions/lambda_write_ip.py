@@ -37,7 +37,6 @@ def lambda_handler(event, context):
             #':a': actors
         },
         ReturnValues="UPDATED_NEW"
-        print('ReturnValues=' + ReturnValues)
     )
     #return dbresponse
     print('dbresponse=' + dbresponse)
