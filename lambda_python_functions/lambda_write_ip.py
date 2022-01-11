@@ -4,7 +4,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 
 
-def lambda_handler(event, context):
+def lambda_handler(event, context, dynamodb=None):
     #1. Parse out query string params
     visitorip = event['queryStringParameters']['ip']
     visitordatetime = event['queryStringParameters']['datetime']
@@ -42,7 +42,7 @@ def lambda_handler(event, context):
     print('dbresponse=' + dbresponse)
 
     scanresponse = table.scan()
-    data = response['Items']
+    data = scanresponse['Items']
 
     #Scan has 1 MB limit on the amount of data it will return in a request, so we need to paginate through the results in a loop.
     while 'LastEvaluatedKey' in scanresponse:
