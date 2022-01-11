@@ -48,7 +48,7 @@ def lambda_handler(event, context):
     while 'LastEvaluatedKey' in scanresponse:
         scanresponse = table.scan(ExclusiveStartKey=scanresponse['LastEvaluatedKey'])
         data.extend(scanresponse['Items'])
-        var uniqueip = 0
+        uniqueip = 0
 
     for item in data:
         print(item['ip'], ":", item['datetime'])
