@@ -39,6 +39,7 @@ def lambda_handler(event, context):
     #return dbresponse
     print('dbresponse=' + dbresponse)
 
+    #query table
     scanresponse = table.scan()
     data = scanresponse['Items']
 
@@ -48,6 +49,7 @@ def lambda_handler(event, context):
         data.extend(scanresponse['Items'])
         uniqueip = 0
 
+    #count through all items
     for item in data:
         print(item['ip'], ":", item['datetime'])
         uniqueip += 1
