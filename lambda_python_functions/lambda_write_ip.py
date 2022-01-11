@@ -19,7 +19,8 @@ def lambda_handler(event, context):
 
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
 
-    table = dynamodb.Table('visitors')
+    table = dynamodb.Table("visitors")
+    print(table.table_status)
 
     dbresponse = table.update_item(
         Key={
@@ -37,7 +38,7 @@ def lambda_handler(event, context):
         ReturnValues="UPDATED_NEW"
     )
     #return dbresponse
-    print('dbresponse=' + dbresponse)
+    print('dbresponse=' + ReturnValues)
 
     #query table
     scanresponse = table.scan()
