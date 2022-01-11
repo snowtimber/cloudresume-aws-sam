@@ -24,7 +24,7 @@ Resources:
       Handler: function.lambda_handler
       Runtime: python3.8
       CodeUri: ./lambda_python_functions/
-      Description: testing lambda python api gateway
+      Description: testing lambda python api gateway with Hello World
       Events:
         Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
           Type: Api
