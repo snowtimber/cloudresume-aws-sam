@@ -1,10 +1,9 @@
 import json
-from pprint import pprint
 import boto3
 from boto3.dynamodb.conditions import Key
 
 
-def lambda_handler(event, context, dynamodb=None):
+def lambda_handler(event, context):
     #1. Parse out query string params
     visitorip = event['queryStringParameters']['ip']
     visitordatetime = event['queryStringParameters']['datetime']

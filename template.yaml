@@ -39,7 +39,7 @@
               Method: ANY
 
 
-    visitors:
+    dynamodb:
         Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
         Properties:
           TableName: visitors
