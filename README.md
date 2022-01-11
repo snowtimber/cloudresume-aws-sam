@@ -1,5 +1,5 @@
 # cloudresume-aws-sam
-This is the backend to my cloud resume using AWS SAM to create a visitor counter using
+This is the backend to my cloud resume (https://heyitslogan.com/) using AWS SAM to create a visitor counter using
 js <-> Api Gateway <-> lambda function (python) <-> DynamoDB
 
 # GitHub Actions SAM Deployment Example
