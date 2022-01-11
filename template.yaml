@@ -1,48 +1,42 @@
 #template from https://github.com/aws-samples/aws-sam-github-actions-example
-  AWSTemplateFormatVersion: '2010-09-09'
-  Transform: AWS::Serverless-2016-10-31
-  Description: A SAM (Serverless Application Model) that uses a transform & Cloudformation to creat api gateway, lamda function, and dynamo db table necessary to store a visitor counter. Test.
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A SAM (Serverless Application Model) visitor counter using lambda and python.
 
-  Parameters:
+Resources:
+  NewVisitorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_write_ip.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./lambda_python_functions/
+      Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
+      Events:
+        Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
+          Type: Api
+          Properties:
+            Path: "/counter"
+            Method: ANY
 
-    Name:
-      Type: String
-      Description: heyitslogan.com resume stack
+  TransactionProcessor:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: function.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./lambda_python_functions/
+      Description: testing lambda python api gateway
+      Events:
+        Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
+          Type: Api
+          Properties:
+            Path: "/transactions"
+            Method: ANY
 
-  Resources:
-    NewVisitorFunction:
-      Type: AWS::Serverless::Function
+
+  dynamodb:
+      Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
       Properties:
-        Handler: lambda_write_ip.lambda_handler
-        Runtime: python3.8
-        CodeUri: ./lambda_python_functions/
-        Description: send ip datetime, store ip datetime in dynamodb, return count of unique ip
-        Events:
-          Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
-            Type: Api
-            Properties:
-              Path: "/counter"
-              Method: ANY
-
-    TransactionProcessor:
-      Type: AWS::Serverless::Function
-      Properties:
-        Handler: function.lambda_handler
-        Runtime: python3.8
-        CodeUri: ./lambda_python_functions/
-        Description: testing lambda python api gateway
-        Events:
-          Api: # This lambda is triggered by a request to the API Gateway Endpoint /get-breed
-            Type: Api
-            Properties:
-              Path: "/transactions"
-              Method: ANY
-
-
-    dynamodb:
-        Type: AWS::Serverless::SimpleTable #or AWS::DynamoDB::Table as "This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.  - This property is passed directly to the TableName property of an AWS::DynamoDB::Table resource.
-        Properties:
-          TableName: visitors
-          PrimaryKey:
-            Name: ip
-            Type: String
+        TableName: visitors
+        PrimaryKey:
+          Name: ip
+          Type: String
