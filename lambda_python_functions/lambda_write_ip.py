@@ -17,7 +17,7 @@ def lambda_handler(event, context):
     #transactionResponse['type'] = transactionType
     #transactionResponse['message'] = 'Hello from Lambda land'
 
-    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
+    dynamodb = boto3.resource('dynamodb', endpoint_url="https://dynamodb.us-east-1.amazonaws.com")
 
     table = dynamodb.Table("visitors")
     print(table.table_status)
