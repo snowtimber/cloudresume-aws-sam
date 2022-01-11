@@ -6,17 +6,17 @@ from boto3.dynamodb.conditions import Key
 
 def lambda_handler(event, context):
     #1. Parse out query string params
-	visitorip = event['queryStringParameters']['ip']
-	visitordatetime = event['queryStringParameters']['datetime']
+    visitorip = event['queryStringParameters']['ip']
+    visitordatetime = event['queryStringParameters']['datetime']
 
-	print('visitorip=' + visitorip)
-	print('visitordatetime=' + visitordatetime)
+    print('visitorip=' + visitorip)
+    print('visitordatetime=' + visitordatetime)
 
-	#2. Construct the body of the response object
-	#transactionResponse = {}
-	#transactionResponse['transactionid'] = transactionId
-	#transactionResponse['type'] = transactionType
-	#transactionResponse['message'] = 'Hello from Lambda land'
+    #2. Construct the body of the response object
+    #transactionResponse = {}
+    #transactionResponse['transactionid'] = transactionId
+    #transactionResponse['type'] = transactionType
+    #transactionResponse['message'] = 'Hello from Lambda land'
 
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
@@ -62,19 +62,19 @@ def lambda_handler(event, context):
     print('count uniqueip=' + uniqueip)
 
     #2. Construct the body of the response object
-	#transactionResponse = {}
-	#transactionResponse['transactionid'] = transactionId
-	#transactionResponse['type'] = transactionType
-	#transactionResponse['message'] = 'Hello from Lambda land'
+    #transactionResponse = {}
+    #transactionResponse['transactionid'] = transactionId
+    #transactionResponse['type'] = transactionType
+    #transactionResponse['message'] = 'Hello from Lambda land'
 
 
-	#3. Construct http response object
-	responseObject = {}
-	responseObject['statusCode'] = 200
-	responseObject['headers'] = {}
-	responseObject['headers']['Content-Type'] = 'application/json'
-	responseObject['headers']['Access-Control-Allow-Origin'] = 'https://heyitslogan.com'
-	responseObject['body'] = json.dumps(uniqueip)
+    #3. Construct http response object
+    responseObject = {}
+    responseObject['statusCode'] = 200
+    responseObject['headers'] = {}
+    responseObject['headers']['Content-Type'] = 'application/json'
+    responseObject['headers']['Access-Control-Allow-Origin'] = 'https://heyitslogan.com'
+    responseObject['body'] = json.dumps(uniqueip)
 
-	#4. Return the response object
-	return responseObject #the end
+    #4. Return the response object
+    return responseObject #the end
