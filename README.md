@@ -6,7 +6,7 @@ Hey all, here is my attempt at Forrest Brazeal's #CloudResumeChallenge:
 
 This repo is specific to my attempt to create the backend using dynamoDB, Lambda, AWS API gateways necessary for my cloud resume's visitor counter using AWS SAM.  Please see this link for the frontend code and my full experience building out this challenge -> https://github.com/MooseEagleShark/LoganTMeyerResume/
 
-Here are the challenge requirements from his blogpost at: https://forrestbrazeal.com/2020/04/23/the-cloud-resume-challenge/
+Here are the challenge requirements from Forrest's blogpost at: https://forrestbrazeal.com/2020/04/23/the-cloud-resume-challenge/
 
 # GitHub Actions SAM Deployment Example
 The purpose of this repository is to illustrate a GitHub Actions pipeline deploying a SAM template.
