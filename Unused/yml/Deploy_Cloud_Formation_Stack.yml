@@ -1,2 +1,0 @@
-- name: AWS CloudFormation "Deploy CloudFormation Stack" Action for GitHub Actions
-  uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
