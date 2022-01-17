@@ -2,7 +2,7 @@
 This is the backend to my cloud resume (https://heyitslogan.com/) using AWS SAM to create a visitor counter using
 js <-> Api Gateway <-> lambda function (python) <-> DynamoDB
 
-You can read my blog post at https://heyitslogan.com/journal.html
+You can read my blog post at https://heyitslogan.com/journal.html.
 
 Hey all, here is my attempt at Forrest Brazeal's #CloudResumeChallenge:
 
