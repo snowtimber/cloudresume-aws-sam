@@ -2,6 +2,8 @@
 This is the backend to my cloud resume (https://heyitslogan.com/) using AWS SAM to create a visitor counter using
 js <-> Api Gateway <-> lambda function (python) <-> DynamoDB
 
+You can read my blog post at https://heyitslogan.com/journal.html
+
 Hey all, here is my attempt at Forrest Brazeal's #CloudResumeChallenge:
 
 This repo is specific to my attempt to create the backend using dynamoDB, Lambda, AWS API gateways necessary for my cloud resume's visitor counter using AWS SAM.  Please see this link for the frontend code and my full experience building out this challenge -> https://github.com/MooseEagleShark/LoganTMeyerResume/
