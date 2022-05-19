@@ -8,7 +8,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda_write_ip.lambda_handler
-      Runtime: python3.9
+      Runtime: python3.8
       CodeUri: ./lambda_python_functions/
       Policies:
       # Give the Lambda service access to poll your DynamoDB Stream
